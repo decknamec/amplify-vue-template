@@ -2,37 +2,35 @@
 import Todos from "./components/Todos.vue";
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
-import { getCurrentUser } from "aws-amplify/auth";
-import { onMounted } from "vue";
+import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
+import { onMounted, ref } from "vue";
 
-import { fetchAuthSession } from "@aws-amplify/core";
-import { get } from "http";
-
-async function getAuthToken() {
-  try {
-    // Abrufen der aktuellen Authentifizierungssession
-    const session = await fetchAuthSession();
-
-    if (!session.tokens) {
-      return;
-    } // Auth-Token aus der Session extrahieren
-
-    const authToken = session.tokens.accessToken;
-
-    console.log("Auth Token:", authToken);
-    return authToken;
-  } catch (error) {
-    console.error("Fehler beim Abrufen des AuthTokens:", error);
-  }
-}
+const userGroups = ref([]);
 
 onMounted(async () => {
-  const { username, userId, signInDetails } = await getCurrentUser();
-  const abc = console.log("username", username);
-  console.log("user id", userId);
-  console.log("sign-in details", signInDetails);
+  try {
+    const currentUser = await getCurrentUser();
+    console.log("User:", currentUser);
+    if (currentUser) {
+      const session = await fetchAuthSession();
+      console.log("Session:", session);
 
-  getAuthToken();
+      const jwtToken = session.tokens?.accessToken;
+      console.log("JWT Token:", jwtToken);
+
+      // Extrahiere Gruppeninformationen aus dem AccessToken
+      const groups = session.tokens.accessToken.payload["cognito:groups"] || [];
+      userGroups.value = groups;
+      console.log("User Groups:", userGroups.value);
+
+      const { username, userId, signInDetails } = currentUser;
+      console.log("Username:", username);
+      console.log("User ID:", userId);
+      console.log("Sign-In Details:", signInDetails);
+    }
+  } catch (error) {
+    console.error("Error getting current session:", error);
+  }
 });
 </script>
 
@@ -43,6 +41,7 @@ onMounted(async () => {
         <h1>Hello {{ user?.signInDetails?.loginId }}'s todos</h1>
         <h2>{{ user.signInDetails }}</h2>
         <Todos />
+        <h2>{{ userGroups.join(", ") }}</h2>
         <button @click="signOut">Sign Out</button>
       </template>
     </authenticator>
