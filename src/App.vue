@@ -1,19 +1,35 @@
 <script setup lang="ts">
-import { Authenticator, useAuthenticator } from "@aws-amplify/ui-vue";
-import { ref, onMounted } from "vue";
 import Todos from "./components/Todos.vue";
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
+import { getCurrentUser } from "aws-amplify/auth";
+import { onMounted } from "vue";
 
-const userGroups = ref<string[]>([]);
+import { fetchAuthSession } from "@aws-amplify/core";
 
-const { user } = useAuthenticator();
+async function getAuthToken() {
+  try {
+    // Abrufen der aktuellen Authentifizierungssession
+    const session = await fetchAuthSession();
 
-onMounted(() => {
-  if (user.value) {
-    const groups =
-      user.value.signInUserSession?.accessToken?.payload["cognito:groups"] ||
-      [];
-    userGroups.value = groups;
+    if (!session.tokens) {
+      return;
+    } // Auth-Token aus der Session extrahieren
+
+    const authToken = session.tokens.accessToken;
+
+    console.log("Auth Token:", authToken);
+    return authToken;
+  } catch (error) {
+    console.error("Fehler beim Abrufen des AuthTokens:", error);
   }
+}
+
+onMounted(async () => {
+  const { username, userId, signInDetails } = await getCurrentUser();
+  const abc = console.log("username", username);
+  console.log("user id", userId);
+  console.log("sign-in details", signInDetails);
 });
 </script>
 
@@ -21,13 +37,10 @@ onMounted(() => {
   <main>
     <authenticator>
       <template v-slot="{ user, signOut }">
-        <h1 v-if="user">Hello {{ user.signInDetails?.loginId }}'s todos</h1>
-        <h2 v-if="user">Groups:</h2>
-        <ul v-if="user">
-          <li v-for="group in userGroups" :key="group">{{ group }}</li>
-        </ul>
+        <h1>Hello {{ user?.signInDetails?.loginId }}'s todos</h1>
+        <h2>{{ user.signInDetails }}</h2>
         <Todos />
-        <button v-if="user" @click="signOut">Sign Out</button>
+        <button @click="signOut">Sign Out</button>
       </template>
     </authenticator>
   </main>
