@@ -6,11 +6,6 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
-  Article: a
-    .model({})
-    .authorization((allow) => [
-      allow.groups(["EDITORS"]).to(["read", "update"]),
-    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
