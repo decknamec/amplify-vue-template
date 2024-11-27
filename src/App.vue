@@ -6,6 +6,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { onMounted } from "vue";
 
 import { fetchAuthSession } from "@aws-amplify/core";
+import { get } from "http";
 
 async function getAuthToken() {
   try {
@@ -30,6 +31,8 @@ onMounted(async () => {
   const abc = console.log("username", username);
   console.log("user id", userId);
   console.log("sign-in details", signInDetails);
+
+  getAuthToken();
 });
 </script>
 
