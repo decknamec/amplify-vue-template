@@ -18,8 +18,10 @@ onMounted(() => {
       <template v-slot="{ user, signOut }">
         <h1>Hello {{ user?.signInDetails?.loginId }}'s todos</h1>
         <h2>{{ user.signInDetails }}</h2>
+        <h2>{{ user.signInDetails }}</h2>
         <Todos />
         <AdminLayout />
+
         <button @click="signOut">Sign Out</button>
       </template>
     </authenticator>
