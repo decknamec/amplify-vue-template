@@ -3,11 +3,6 @@ import "@/assets/main.css";
 import { onMounted, ref } from "vue";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-import { useAuthenticator } from "@aws-amplify/ui-vue";
-import {
-  CfnUserPoolGroup,
-  UserPoolClientIdentityProvider,
-} from "aws-cdk-lib/aws-cognito";
 
 const client = generateClient<Schema>();
 
@@ -61,11 +56,12 @@ function deleteAdminTodo(id: string) {
 } */
 
 // fetch todos when the component is mounted
-const auth = useAuthenticator();
+
 const isAdmin = ref(false);
 
 onMounted(async () => {
-  console.log(CfnUserPoolGroup);
+  //token ans backend schicken
+  // backend schickt iwas zurück
   listTodos();
 });
 </script>

@@ -1,17 +1,32 @@
 <script setup lang="ts">
-import Todos from "./components/Todos.vue";
-import { Authenticator } from "@aws-amplify/ui-vue";
-import "@aws-amplify/ui-vue/styles.css";
+import { useAuthenticator } from "@aws-amplify/ui-vue";
+import { ref, onMounted } from "vue";
+
+const userGroups = ref<string[]>([]);
+
+const { user } = useAuthenticator();
+
+onMounted(() => {
+  if (user.value) {
+    const groups =
+      user.value.signInUserSession?.accessToken?.payload["cognito:groups"] ||
+      [];
+    userGroups.value = groups;
+  }
+});
 </script>
 
 <template>
   <main>
     <authenticator>
       <template v-slot="{ user, signOut }">
-        <h1>Hello {{ user?.signInDetails?.loginId }}'s todos</h1>
-        <h2>{{ user.signInDetails }}</h2>
+        <h1 v-if="user">Hello {{ user.signInDetails?.loginId }}'s todos</h1>
+        <h2 v-if="user">Groups:</h2>
+        <ul v-if="user">
+          <li v-for="group in userGroups" :key="group">{{ group }}</li>
+        </ul>
         <Todos />
-        <button @click="signOut">Sign Out</button>
+        <button v-if="user" @click="signOut">Sign Out</button>
       </template>
     </authenticator>
   </main>
