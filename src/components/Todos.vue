@@ -4,6 +4,10 @@ import { onMounted, ref } from "vue";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { useAuthenticator } from "@aws-amplify/ui-vue";
+import {
+  CfnUserPoolGroup,
+  UserPoolClientIdentityProvider,
+} from "aws-cdk-lib/aws-cognito";
 
 const client = generateClient<Schema>();
 
@@ -61,14 +65,7 @@ const auth = useAuthenticator();
 const isAdmin = ref(false);
 
 onMounted(async () => {
-  const currentUser = await auth.user;
-  if (currentUser) {
-    console.log("HELLO", currentUser);
-    console.log((auth.groups = ["ADMINS"]));
-    const groups =
-      currentUser.signInDetails?.attributes["cognito:groups"] || [];
-    isAdmin.value = groups.includes("ADMINS"); // Überprüfen, ob der Benutzer in der Admin-Gruppe ist
-  }
+  console.log(CfnUserPoolGroup);
   listTodos();
 });
 </script>
