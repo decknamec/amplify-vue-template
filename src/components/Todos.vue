@@ -63,6 +63,7 @@ const isAdmin = ref(false);
 onMounted(async () => {
   const currentUser = await auth.user;
   if (currentUser) {
+    console.log("HELLO", currentUser);
     const groups =
       currentUser.signInDetails?.attributes["cognito:groups"] || [];
     isAdmin.value = groups.includes("ADMINS"); // Überprüfen, ob der Benutzer in der Admin-Gruppe ist
