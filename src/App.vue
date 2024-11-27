@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Todos from "./components/Todos.vue";
 import { Authenticator } from "@aws-amplify/ui-vue";
+import MyComponent from "./components/MyComponent.vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import { onMounted, ref } from "vue";
@@ -45,6 +46,7 @@ onMounted(async () => {
       <template v-slot="{ user, signOut }">
         <h1>Hello {{ user?.signInDetails?.loginId }}'s todos</h1>
         <Todos />
+        <MyComponent />
         <abc />
         <h2>Du bist {{ userGroups.join(", ") }}</h2>
         <button @click="signOut">Sign Out</button>
