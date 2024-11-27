@@ -1,6 +1,6 @@
 <script setup>
 import Todos from "./components/Todos.vue";
-import AdminLayout from "./components/AdminLayout";
+import AdminLayout from "./components/AdminLayout.vue";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { onMounted } from "vue";
