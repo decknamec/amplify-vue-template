@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useAuthenticator } from "@aws-amplify/ui-vue";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-vue";
 import { ref, onMounted } from "vue";
+import Todos from "./components/Todos.vue";
 
 const userGroups = ref<string[]>([]);
 
