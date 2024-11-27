@@ -3,6 +3,7 @@ import "@/assets/main.css";
 import { onMounted, ref } from "vue";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import { useAuthenticator } from "@aws-amplify/ui-vue";
 
 const client = generateClient<Schema>();
 
@@ -56,9 +57,17 @@ function deleteAdminTodo(id: string) {
 } */
 
 // fetch todos when the component is mounted
-onMounted(() => {
+const auth = useAuthenticator();
+const user = auth;
+const isAdmin = ref(false);
+onMounted(async () => {
+  const currentUser = await auth.user;
+  if (currentUser) {
+    const groups =
+      currentUser.signInDetails?.attributes["cognito:groups"] || [];
+    isAdmin.value = groups.includes("ADMINS"); // Überprüfen, ob der Benutzer in der Admin-Gruppe ist
+  }
   listTodos();
-  //listAdminTodos();
 });
 </script>
 
@@ -73,7 +82,7 @@ onMounted(() => {
     </ul>
 
     <div>
-      🥳 App successfully hosted. Try creating a new todo.
+      YOU ARE A {{ isAdmin ? "ADMIN" : "USER" }}
       <br />
     </div>
   </main>
