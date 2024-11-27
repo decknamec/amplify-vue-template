@@ -32,6 +32,8 @@ function deleteTodo(id: string) {
 }
 
 // ACHTUNG ADMIN
+
+/*
 function listAdminTodos() {
   client.models.AdminContent.observeQuery().subscribe({
     next: ({ items, isSynced }) => {
@@ -51,12 +53,12 @@ function createAdminTodo() {
 
 function deleteAdminTodo(id: string) {
   client.models.AdminContent.delete({ id });
-}
+} */
 
 // fetch todos when the component is mounted
 onMounted(() => {
   listTodos();
-  listAdminTodos();
+  //listAdminTodos();
 });
 </script>
 
@@ -70,17 +72,6 @@ onMounted(() => {
       </li>
     </ul>
 
-    <h1>My Admin Todos</h1>
-    <button @click="createAdminTodo">+ new</button>
-    <ul>
-      <li
-        v-for="todo in AdminTodos"
-        :key="todo.id"
-        @click="deleteAdminTodo(todo.id)"
-      >
-        {{ todo.content }}
-      </li>
-    </ul>
     <div>
       🥳 App successfully hosted. Try creating a new todo.
       <br />
