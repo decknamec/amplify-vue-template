@@ -45,7 +45,7 @@ function createAdminTodo() {
     content: window.prompt("Admin content"),
   }).then(() => {
     // After creating a new todo, update the list of todos
-    listTodos();
+    listAdminTodos();
   });
 }
 
