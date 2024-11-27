@@ -58,7 +58,6 @@ function deleteAdminTodo(id: string) {
 
 // fetch todos when the component is mounted
 const auth = useAuthenticator();
-const user = auth;
 const isAdmin = ref(false);
 onMounted(async () => {
   const currentUser = await auth.user;
