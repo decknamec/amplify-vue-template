@@ -5,7 +5,7 @@ import "@aws-amplify/ui-vue/styles.css";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import { onMounted, ref } from "vue";
 
-const userGroups = ref([]);
+const userGroups = ref<string[]>([]);
 
 onMounted(async () => {
   try {
@@ -23,7 +23,8 @@ onMounted(async () => {
       }
 
       // Extrahiere Gruppeninformationen aus dem AccessToken
-      const groups = session.tokens.accessToken.payload["cognito:groups"] || [];
+      const groups = (session.tokens.accessToken.payload["cognito:groups"] ||
+        []) as string[];
       userGroups.value = groups;
       console.log("User Groups:", userGroups.value);
 
