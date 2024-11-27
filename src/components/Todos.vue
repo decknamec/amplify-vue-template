@@ -8,7 +8,7 @@ const client = generateClient<Schema>();
 
 // create a reactive reference to the array of todos
 const todos = ref<Array<Schema["Todo"]["type"]>>([]);
-const AdminTodos = ref<Array<Schema["Todo"]["type"]>>([]);
+const AdminTodos = ref<Array<Schema["AdminContent"]["type"]>>([]);
 
 function listTodos() {
   client.models.Todo.observeQuery().subscribe({
@@ -41,10 +41,10 @@ function listAdminTodos() {
 }
 
 function createAdminTodo() {
-  client.models.Todo.create({
-    content: window.prompt("Admin Todo content"),
+  client.models.AdminContent.create({
+    title: window.prompt("Admin Todo title") || "Untitled",
+    description: window.prompt("Admin Todo description") || "No description",
   }).then(() => {
-    // After creating a new todo, update the list of todos
     listAdminTodos();
   });
 }
@@ -56,6 +56,7 @@ function deleteAdminTodo(id: string) {
 // fetch todos when the component is mounted
 onMounted(() => {
   listTodos();
+  listAdminTodos();
 });
 </script>
 
@@ -66,6 +67,18 @@ onMounted(() => {
     <ul>
       <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
         {{ todo.content }}
+      </li>
+    </ul>
+
+    <h1>My Admin Todos</h1>
+    <button @click="createAdminTodo">+ new</button>
+    <ul>
+      <li
+        v-for="todo in AdminTodos"
+        :key="todo.id"
+        @click="deleteAdminTodo(todo.id)"
+      >
+        {{ todo.title }}
       </li>
     </ul>
     <div>
