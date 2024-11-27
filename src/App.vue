@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Todos from "./components/Todos.vue";
-import abc from "./components/abc.vue";
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
