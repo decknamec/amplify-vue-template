@@ -12,7 +12,9 @@ const schema = a.schema({
       title: a.string(),
       description: a.string(),
     })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [
+      allow.groups(["ADMINS"]), // Nur ADMINS können auf AdminContent zugreifen
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
