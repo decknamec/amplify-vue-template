@@ -59,10 +59,12 @@ function deleteAdminTodo(id: string) {
 // fetch todos when the component is mounted
 const auth = useAuthenticator();
 const isAdmin = ref(false);
+
 onMounted(async () => {
   const currentUser = await auth.user;
   if (currentUser) {
     console.log("HELLO", currentUser);
+    console.log((auth.groups = ["ADMINS"]));
     const groups =
       currentUser.signInDetails?.attributes["cognito:groups"] || [];
     isAdmin.value = groups.includes("ADMINS"); // Überprüfen, ob der Benutzer in der Admin-Gruppe ist
