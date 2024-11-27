@@ -3,8 +3,11 @@ import "@/assets/main.css";
 import { onMounted, ref } from "vue";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-import { Auth } from "@aws-amplify/auth";
 import { useAuthenticator } from "@aws-amplify/ui-vue";
+import {
+  CfnUserPoolGroup,
+  UserPoolClientIdentityProvider,
+} from "aws-cdk-lib/aws-cognito";
 
 const client = generateClient<Schema>();
 
@@ -15,12 +18,7 @@ const AdminTodos = ref<Array<Schema["AdminContent"]["type"]>>([]);
 function listTodos() {
   client.models.Todo.observeQuery().subscribe({
     next: ({ items, isSynced }) => {
-      console.log("Items:", items);
-      console.log("Is Synced:", isSynced);
       todos.value = items;
-    },
-    error: (error) => {
-      console.error("Error fetching todos:", error);
     },
   });
 }
@@ -46,9 +44,6 @@ function listAdminTodos() {
     next: ({ items, isSynced }) => {
       AdminTodos.value = items;
     },
-    error: (error) => {
-      console.error('Error fetching admin todos:', error);
-    }
   });
 }
 
@@ -56,7 +51,7 @@ function createAdminTodo() {
   client.models.AdminContent.create({
     content: window.prompt("Admin content"),
   }).then(() => {
-    // After creating a new admin todo, update the list of todos
+    // After creating a new todo, update the list of todos
     listAdminTodos();
   });
 }
@@ -67,24 +62,11 @@ function deleteAdminTodo(id: string) {
 
 // fetch todos when the component is mounted
 const auth = useAuthenticator();
-const user = ref(null);
 const isAdmin = ref(false);
 
 onMounted(async () => {
-  try {
-    const currentUser = await Auth.currentAuthenticatedUser();
-    if (currentUser) {
-      user.value = currentUser;
-      console.log("HELLO", currentUser);
-      const groups =
-        currentUser.signInUserSession.accessToken.payload["cognito:groups"] ||
-        [];
-      isAdmin.value = groups.includes("ADMINS"); // Überprüfen, ob der Benutzer in der Admin-Gruppe ist
-    }
-    listTodos();
-  } catch (error) {
-    console.error("Error getting current authenticated user:", error);
-  }
+  console.log(CfnUserPoolGroup);
+  listTodos();
 });
 </script>
 
