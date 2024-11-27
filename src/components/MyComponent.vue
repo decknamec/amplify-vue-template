@@ -17,7 +17,7 @@ export default defineComponent({
     return {
       title: "Hallo, Vue mit TypeScript!",
       responseData: null,
-      errorMessage: null,
+      errorMessage: null as string | null,
     };
   },
   methods: {
