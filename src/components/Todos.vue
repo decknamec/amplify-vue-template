@@ -42,10 +42,10 @@ function listAdminTodos() {
 
 function createAdminTodo() {
   client.models.AdminContent.create({
-    title: window.prompt("Admin Todo title") || "Untitled",
-    description: window.prompt("Admin Todo description") || "No description",
+    content: window.prompt("Admin content"),
   }).then(() => {
-    listAdminTodos();
+    // After creating a new todo, update the list of todos
+    listTodos();
   });
 }
 
@@ -78,7 +78,7 @@ onMounted(() => {
         :key="todo.id"
         @click="deleteAdminTodo(todo.id)"
       >
-        {{ todo.title }}
+        {{ todo.content }}
       </li>
     </ul>
     <div>

@@ -9,8 +9,7 @@ const schema = a.schema({
 
   AdminContent: a
     .model({
-      title: a.string(),
-      description: a.string(),
+      content: a.string(),
     })
     .authorization((allow) => [
       allow.groups(["ADMINS"]), // Nur ADMINS können auf AdminContent zugreifen
