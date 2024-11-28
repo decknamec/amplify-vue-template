@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>{{ title }}</h1>
     <button @click="fetchData">Daten laden</button>
     <p v-if="responseData">{{ responseData }}</p>
     <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
@@ -8,14 +7,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
 import axios from "axios";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "MyComponent",
   data() {
     return {
-      title: "Hallo, Vue mit TypeScript!",
       responseData: null,
       errorMessage: null as string | null,
     };
