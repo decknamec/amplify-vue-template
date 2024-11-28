@@ -2,7 +2,7 @@ import { defineBackend } from "@aws-amplify/backend";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { storage } from "./storage/resource";
-import { myFirstFunction } from "./my-first-function/ressource";
+
 import { myPythonFunction } from "./myPythonFunction/ressource";
 
 /**
@@ -12,7 +12,7 @@ const backend = defineBackend({
   auth,
   data,
   storage,
-  myFirstFunction,
+
   myPythonFunction,
 });
 
